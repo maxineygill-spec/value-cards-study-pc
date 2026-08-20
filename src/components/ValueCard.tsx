@@ -33,15 +33,15 @@ const ValueCard = ({
   const [flipped, setFlipped] = useState(false);
 
   const sizeClasses = {
-    sm: 'w-28 h-36 p-3 text-xs sm:w-32 sm:h-44',
-    md: 'w-32 h-40 p-3.5 text-sm sm:w-36 sm:h-48',
-    lg: 'w-36 h-44 p-4 text-base sm:w-40 sm:h-52',
+    sm: 'w-28 h-36 p-3 text-[11px] sm:w-32 sm:h-44',
+    md: 'w-32 h-40 p-3.5 text-[13px] sm:w-36 sm:h-48',
+    lg: 'w-36 h-44 p-4 text-[15px] sm:w-40 sm:h-52',
   };
 
   const titleSize = {
-    sm: 'text-sm sm:text-base',
-    md: 'text-base sm:text-lg',
-    lg: 'text-lg sm:text-xl',
+    sm: 'text-[13px] sm:text-[15px]',
+    md: 'text-[15px] sm:text-[17px]',
+    lg: 'text-[17px] sm:text-[19px]',
   };
 
   if (isFaceDown) {
@@ -52,7 +52,7 @@ const ValueCard = ({
         transition={{ delay: index * 0.05, duration: 0.3 }}
         className={`${sizeClasses[size]} rounded-xl bg-muted border border-border flex items-center justify-center`}
       >
-        <span className="text-xl opacity-30">?</span>
+        <span className="text-[19px] opacity-30">?</span>
       </motion.div>
     );
   }
@@ -91,7 +91,7 @@ const ValueCard = ({
           `}
         >
           {showCheckmark && (
-            <div className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground rounded-full w-5 h-5 text-xs flex items-center justify-center shadow z-20">
+            <div className="absolute -top-1.5 -right-1.5 bg-primary text-primary-foreground rounded-full w-5 h-5 text-[11px] flex items-center justify-center shadow z-20">
               ✓
             </div>
           )}
@@ -121,7 +121,7 @@ const ValueCard = ({
               card-shadow
             `}
           >
-            <p className="font-sans leading-snug text-center text-card-foreground/90 text-xs sm:text-sm max-h-full overflow-y-auto">
+            <p className="font-sans leading-snug text-center text-card-foreground/90 text-[11px] sm:text-[13px] max-h-full overflow-y-auto">
               {value.definition}
             </p>
           </div>
