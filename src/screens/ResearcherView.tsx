@@ -384,8 +384,16 @@ const ResearcherView = ({
 
         {!authChecked ? (
           <div className="px-6 py-16 text-center text-xs text-slate-400">Checking access…</div>
+        ) : recovering && session ? (
+          <div className="px-6 py-6">
+            <UpdatePasswordForm onDone={() => {
+              setRecovering(false);
+              window.history.replaceState({}, '', window.location.pathname);
+            }} />
+          </div>
         ) : !session ? (
           <div className="px-6 py-6"><LoginGate onAuthed={() => { /* handled by listener */ }} /></div>
+
         ) : isResearcher === false ? (
           <div className="px-6 py-10 text-center space-y-3">
             <p className="text-sm text-slate-700">Signed in as <span className="font-mono">{session.user.email}</span></p>
