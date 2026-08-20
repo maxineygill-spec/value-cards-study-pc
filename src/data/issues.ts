@@ -3,7 +3,7 @@ export interface Issue {
 }
 
 export const ALL_ISSUES: Issue[] = [
-  { name: "Strengthening economy" },
+  { name: "Strengthening the economy" },
   { name: "Defending against terrorism" },
   { name: "Reducing influence of money in politics" },
   { name: "Reducing health care costs" },
@@ -19,7 +19,7 @@ export const ALL_ISSUES: Issue[] = [
   { name: "Protecting the environment" },
   { name: "Dealing with problems of poor people" },
   { name: "Improving transportation" },
-  { name: "Strengthening military" },
+  { name: "Strengthening the military" },
   { name: "Dealing with climate change" },
   { name: "Addressing issues around race" },
   { name: "Dealing with global trade" },
