@@ -322,6 +322,8 @@ const ResearcherView = ({
   const [session, setSession] = useState<Session | null>(null);
   const [isResearcher, setIsResearcher] = useState<boolean | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [recovering, setRecovering] = useState(false);
+
 
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000);
