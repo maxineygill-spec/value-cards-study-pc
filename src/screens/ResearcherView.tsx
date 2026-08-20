@@ -341,12 +341,11 @@ const ResearcherView = ({
   }, []);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_evt, s) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((evt, s) => {
       setSession(s);
+      if (evt === 'PASSWORD_RECOVERY') setRecovering(true);
       if (s?.user) checkRole(s.user.id); else setIsResearcher(null);
     });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
       if (data.session?.user) checkRole(data.session.user.id);
       setAuthChecked(true);
     });
