@@ -29,6 +29,9 @@ export type GamePhase =
 
 export type Condition = "values" | "issues";
 
+/** Single active study condition. Change to "values" to re-enable that deck. */
+const ACTIVE_CONDITION: Condition = "issues";
+
 export interface PartnerDisplay {
   id: string;
   name: string;
