@@ -185,8 +185,99 @@ const AllSessionsTab = () => {
 };
 
 const LoginGate = ({ onAuthed }: { onAuthed: () => void }) => {
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [mode, setMode] = useState<'signin' | 'signup' | 'reset'>('signin');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    setErr(null);
+    setNotice(null);
+
+    if (mode === 'reset') {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/`,
+      });
+      setBusy(false);
+      if (error) { setErr(error.message); return; }
+      setNotice('If an account exists for that email, a reset link is on its way. Open it in this browser, then set a new password.');
+      return;
+    }
+
+    const fn = mode === 'signin'
+      ? supabase.auth.signInWithPassword({ email, password })
+      : supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/` } });
+    const { error } = await fn;
+    setBusy(false);
+    if (error) { setErr(error.message); return; }
+    if (mode === 'signup') {
+      setNotice('Account created. If email confirmation is required, confirm via the emailed link, then sign in.');
+    }
+    onAuthed();
+  };
+
+  const switchTo = (m: 'signin' | 'signup' | 'reset') => {
+    setMode(m); setErr(null); setNotice(null);
+  };
+
+  return (
+    <form onSubmit={submit} className="space-y-4 max-w-sm mx-auto py-4">
+      <div>
+        <h3 className="text-base font-semibold text-slate-900 mb-1">
+          {mode === 'reset' ? 'Reset your password' : 'Researcher sign-in required'}
+        </h3>
+        <p className="text-xs text-slate-500">
+          {mode === 'reset'
+            ? "Enter your email and we'll send a password reset link."
+            : 'Only accounts granted the researcher role can view session data.'}
+        </p>
+      </div>
+      <div className="space-y-2">
+        <input
+          type="email" required value={email} onChange={e => setEmail(e.target.value)}
+          placeholder="Email"
+          className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
+        />
+        {mode !== 'reset' && (
+          <input
+            type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)}
+            placeholder="Password (min 8 chars)"
+            className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
+          />
+        )}
+      </div>
+      {err && <p className="text-xs text-rose-600">{err}</p>}
+      {notice && <p className="text-xs text-emerald-700">{notice}</p>}
+      <button
+        type="submit" disabled={busy}
+        className="w-full bg-primary text-primary-foreground rounded px-3 py-2 text-sm font-medium disabled:opacity-50"
+      >{busy ? '…' : mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Send reset link'}</button>
+      <div className="space-y-1">
+        <button
+          type="button" onClick={() => switchTo(mode === 'signin' ? 'signup' : 'signin')}
+          className="w-full text-xs text-slate-500 hover:text-slate-800"
+        >{mode === 'signin' ? "Need an account? Sign up" : 'Have an account? Sign in'}</button>
+        {mode !== 'reset' ? (
+          <button
+            type="button" onClick={() => switchTo('reset')}
+            className="w-full text-xs text-slate-500 hover:text-slate-800"
+          >Forgot password?</button>
+        ) : (
+          <button
+            type="button" onClick={() => switchTo('signin')}
+            className="w-full text-xs text-slate-500 hover:text-slate-800"
+          >Back to sign in</button>
+        )}
+      </div>
+    </form>
+  );
+};
+
+const UpdatePasswordForm = ({ onDone }: { onDone: () => void }) => {
   const [password, setPassword] = useState('');
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -195,45 +286,32 @@ const LoginGate = ({ onAuthed }: { onAuthed: () => void }) => {
     e.preventDefault();
     setBusy(true);
     setErr(null);
-    const fn = mode === 'signin'
-      ? supabase.auth.signInWithPassword({ email, password })
-      : supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/` } });
-    const { error } = await fn;
+    const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
     if (error) { setErr(error.message); return; }
-    onAuthed();
+    onDone();
   };
 
   return (
     <form onSubmit={submit} className="space-y-4 max-w-sm mx-auto py-4">
       <div>
-        <h3 className="text-base font-semibold text-slate-900 mb-1">Researcher sign-in required</h3>
-        <p className="text-xs text-slate-500">Only accounts granted the researcher role can view session data.</p>
+        <h3 className="text-base font-semibold text-slate-900 mb-1">Set a new password</h3>
+        <p className="text-xs text-slate-500">Choose a new password for your researcher account.</p>
       </div>
-      <div className="space-y-2">
-        <input
-          type="email" required value={email} onChange={e => setEmail(e.target.value)}
-          placeholder="Email"
-          className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
-        />
-        <input
-          type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)}
-          placeholder="Password (min 8 chars)"
-          className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
-        />
-      </div>
+      <input
+        type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)}
+        placeholder="New password (min 8 chars)"
+        className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
+      />
       {err && <p className="text-xs text-rose-600">{err}</p>}
       <button
         type="submit" disabled={busy}
         className="w-full bg-primary text-primary-foreground rounded px-3 py-2 text-sm font-medium disabled:opacity-50"
-      >{busy ? '…' : mode === 'signin' ? 'Sign in' : 'Create account'}</button>
-      <button
-        type="button" onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setErr(null); }}
-        className="w-full text-xs text-slate-500 hover:text-slate-800"
-      >{mode === 'signin' ? "Need an account? Sign up" : 'Have an account? Sign in'}</button>
+      >{busy ? '…' : 'Update password'}</button>
     </form>
   );
 };
+
 
 const ResearcherView = ({
   phase, phaseTiming, phaseStartTime, condition,
