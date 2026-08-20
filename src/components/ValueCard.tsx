@@ -33,15 +33,15 @@ const ValueCard = ({
   const [flipped, setFlipped] = useState(false);
 
   const sizeClasses = {
-    sm: 'w-28 h-36 p-3 text-xs sm:w-32 sm:h-44',
-    md: 'w-32 h-40 p-3.5 text-sm sm:w-36 sm:h-48',
-    lg: 'w-36 h-44 p-4 text-base sm:w-40 sm:h-52',
+    sm: 'w-28 h-36 p-3 text-[11px] sm:w-32 sm:h-44',
+    md: 'w-32 h-40 p-3.5 text-[13px] sm:w-36 sm:h-48',
+    lg: 'w-36 h-44 p-4 text-[15px] sm:w-40 sm:h-52',
   };
 
   const titleSize = {
-    sm: 'text-sm sm:text-base',
-    md: 'text-base sm:text-lg',
-    lg: 'text-lg sm:text-xl',
+    sm: 'text-[13px] sm:text-[15px]',
+    md: 'text-[15px] sm:text-[17px]',
+    lg: 'text-[17px] sm:text-[19px]',
   };
 
   if (isFaceDown) {
