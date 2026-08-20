@@ -346,6 +346,9 @@ const ResearcherView = ({
       if (evt === 'PASSWORD_RECOVERY') setRecovering(true);
       if (s?.user) checkRole(s.user.id); else setIsResearcher(null);
     });
+    if (window.location.hash.includes('type=recovery')) setRecovering(true);
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
       if (data.session?.user) checkRole(data.session.user.id);
       setAuthChecked(true);
     });
