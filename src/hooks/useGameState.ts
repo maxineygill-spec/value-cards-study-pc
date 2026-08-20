@@ -64,7 +64,7 @@ const PHASE_ORDER: GamePhase[] = [
 
 export const useGameState = (config: TradeConfig = DEFAULT_TRADE_CONFIG) => {
   const [phase, setPhase] = useState<GamePhase>("mode-select");
-  const [condition, setCondition] = useState<Condition>("values");
+  const [condition, setCondition] = useState<Condition>(ACTIVE_CONDITION);
   const [phaseStartTime, setPhaseStartTime] = useState<number>(Date.now());
   const [phaseTiming, setPhaseTiming] = useState<Record<string, number>>({});
 
@@ -96,7 +96,7 @@ export const useGameState = (config: TradeConfig = DEFAULT_TRADE_CONFIG) => {
   const partnerProfiles = PARTNER_DISPLAY;
 
   const startStudy = useCallback(() => {
-    const assigned: Condition = Math.random() < 0.5 ? "values" : "issues";
+    const assigned: Condition = ACTIVE_CONDITION;
     setCondition(assigned);
     advancePhase("glossary");
   }, [advancePhase]);
