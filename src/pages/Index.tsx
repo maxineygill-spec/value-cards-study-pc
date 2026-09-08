@@ -83,8 +83,6 @@ const Index = () => {
             topN={game.topN}
             partnerProfiles={game.partnerProfiles}
             trades={game.trades}
-            onExport={game.exportData}
-            onPlayAgain={game.resetGame}
           />
         );
       default:

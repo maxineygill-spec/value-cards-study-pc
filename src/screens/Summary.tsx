@@ -58,24 +58,9 @@ const Summary = ({
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onExport}
-            className="flex-1 py-4 bg-primary text-primary-foreground font-sans font-bold rounded-xl"
-          >
-            Download my data
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onPlayAgain}
-            className="flex-1 py-4 bg-muted text-foreground font-sans font-bold rounded-xl border border-border"
-          >
-            Play again
-          </motion.button>
-        </div>
+        <p className="text-center text-foreground font-sans text-base leading-relaxed">
+          Thank you for playing the game! Please click the "Next page" button to move to the final part of the study.
+        </p>
       </motion.div>
     </div>
   );
