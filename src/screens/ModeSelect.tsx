@@ -14,7 +14,7 @@ const ModeSelect = ({ onStart }: ModeSelectProps) => {
         className="text-center mb-10 max-w-md"
       >
         <h1 className="text-4xl sm:text-5xl font-serif font-bold text-foreground mb-3">
-          Value Cards Study
+          Issue Cards Study
         </h1>
         <p className="text-muted-foreground text-lg font-sans">
           Welcome. Click below to begin.
